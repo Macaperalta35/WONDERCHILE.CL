@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ viaje.titulo }} - WonderChile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            {% if session.user_id %}
+                <a href="/carrito" style="text-decoration: none; color: white;"><h1>WonderChile</h1></a>
+            {% else %}
+                <a href="/login" style="text-decoration: none; color: white;"><h1>WonderChile</h1></a>
+            {% endif %}
+            <p>Descubre la magia de Chile y el mundo</p>
+        </div>
+        <div class="header-right">
+            {% if session.user_id %}
+                {% if user_name %}
+                    <span>Bienvenido, {{ user_name }}</span>
+                {% endif %}
+                {% if user_role == 'admin' %}
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn" onclick="toggleAdminDropdown()">Admin ▼</a>
+                        <div class="dropdown-content">
+                            <a href="/admin">Panel de Administración</a>
+                            <a href="/admin/viajes">Gestionar Viajes</a>
+                            <a href="/admin/promociones">Gestionar Promociones</a>
+                            <a href="/admin/viajes/agregar">Agregar Viaje</a>
+                            <a href="/admin/promociones/agregar">Agregar Promoción</a>
+                        </div>
+                    </div>
+                {% endif %}
+                <a href="/carrito">Mi Carrito</a>
+                <a href="/logout">Cerrar Sesión</a>
+            {% else %}
+                <a href="/registro">Registro</a>
+                <a href="/login">Iniciar Sesión</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <nav>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <ul id="nav-menu">
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/paquetes">Paquetes Turísticos</a></li>
+            <li><a href="/giras">Giras de Estudio</a></li>
+            <li><a href="/mujeres">Viajes Solo Mujeres</a></li>
+            <li><a href="/contacto">Viaje a Medida</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="package-detail">
+            <div class="package-header">
+                <h1>{{ viaje.titulo }}</h1>
+                <div class="price-tag">
+                    <span class="price">${{ viaje.precio }}</span>
+                    <span class="per-person">por persona</span>
+                </div>
+            </div>
+
+            <div class="package-content">
+                <div class="main-image">
+                    {% if viaje.imagen %}
+                        <img src="{{ viaje.imagen }}" alt="{{ viaje.titulo }}" class="package-main-img">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="{{ viaje.titulo }}" class="package-main-img">
+                    {% endif %}
+                </div>
+
+                <div class="package-info">
+                    <div class="description">
+                        <h2>Descripción del Paquete</h2>
+                        <p>{{ viaje.descripcion }}</p>
+                    </div>
+
+                    <div class="package-details">
+                        <h2>Detalles del Viaje</h2>
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <h3>🌍 Destino</h3>
+                                <p>{{ viaje.titulo.split(' - ')[1] if ' - ' in viaje.titulo else viaje.titulo }}</p>
+                            </div>
+                            <div class="detail-item">
+                                <h3>📅 Duración</h3>
+                                <p>Consultar disponibilidad</p>
+                            </div>
+                            <div class="detail-item">
+                                <h3>👥 Grupo Mínimo</h3>
+                                <p>4 personas</p>
+                            </div>
+                            <div class="detail-item">
+                                <h3>🏨 Alojamiento</h3>
+                                <p>Hoteles seleccionados</p>
+                            </div>
+                            <div class="detail-item">
+                                <h3>🍽️ Alimentación</h3>
+                                <p>Desayunos incluidos</p>
+                            </div>
+                            <div class="detail-item">
+                                <h3>🚗 Transporte</h3>
+                                <p>Traslados terrestres</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="itinerary">
+                        <h2>Itinerario Sugerido</h2>
+                        <div class="itinerary-item">
+                            <h3>Día 1: Llegada y Bienvenida</h3>
+                            <p>Recepción en el aeropuerto y traslado al hotel. Cena de bienvenida con el grupo.</p>
+                        </div>
+                        <div class="itinerary-item">
+                            <h3>Día 2-3: Actividades Principales</h3>
+                            <p>Exploración de los principales atractivos turísticos según el destino seleccionado.</p>
+                        </div>
+                        <div class="itinerary-item">
+                            <h3>Día 4: Tiempo Libre</h3>
+                            <p>Jornada libre para actividades personales o compras en el destino.</p>
+                        </div>
+                        <div class="itinerary-item">
+                            <h3>Día 5: Regreso</h3>
+                            <p>Traslado al aeropuerto y vuelo de regreso. Fin del viaje.</p>
+                        </div>
+                    </div>
+
+                    <div class="gallery">
+                        <h2>Galería de Fotos</h2>
+                        <div class="gallery-grid">
+                            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Vista panorámica">
+                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Naturaleza">
+                            <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Aventura">
+                            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cultura">
+                        </div>
+                    </div>
+
+                    <div class="included-services">
+                        <h2>Servicios Incluidos</h2>
+                        <ul class="services-list">
+                            <li>✓ Traslados aeropuerto-hotel-aeropuerto</li>
+                            <li>✓ Alojamiento en hotel seleccionado</li>
+                            <li>✓ Desayunos diarios</li>
+                            <li>✓ Guía turístico profesional</li>
+                            <li>✓ Entradas a atractivos turísticos</li>
+                            <li>✓ Seguro de viaje básico</li>
+                            <li>✓ Coordinador del grupo</li>
+                        </ul>
+                    </div>
+
+                    <div class="additional-services">
+                        <h2>Servicios Adicionales</h2>
+                        <div class="additional-options">
+                            <div class="additional-item">
+                                <input type="checkbox" id="extra-night" class="additional-checkbox">
+                                <label for="extra-night">
+                                    <span class="service-name">Noche Extra de Alojamiento</span>
+                                    <span class="service-price">+ $25,000</span>
+                                </label>
+                            </div>
+                            <div class="additional-item">
+                                <input type="checkbox" id="private-tour" class="additional-checkbox">
+                                <label for="private-tour">
+                                    <span class="service-name">Tour Privado Personalizado</span>
+                                    <span class="service-price">+ $15,000</span>
+                                </label>
+                            </div>
+                            <div class="additional-item">
+                                <input type="checkbox" id="vip-transport" class="additional-checkbox">
+                                <label for="vip-transport">
+                                    <span class="service-name">Transporte VIP</span>
+                                    <span class="service-price">+ $10,000</span>
+                                </label>
+                            </div>
+                            <div class="additional-item">
+                                <input type="checkbox" id="special-dinner" class="additional-checkbox">
+                                <label for="special-dinner">
+                                    <span class="service-name">Cena Especial en Restaurante Gourmet</span>
+                                    <span class="service-price">+ $8,000</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="additional-total">
+                            <p>Total Adicionales: <span id="additional-total">$0</span></p>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-primary" onclick="agregarAlCarrito('{{ viaje.titulo }}')">🛒 Agregar al Carrito</button>
+                        <a href="/contacto" class="btn-secondary">📞 Consultar Disponibilidad</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Grupowonderchile</h3>
+                <p>Agencia de viajes especializada en experiencias grupales, planificación personalizada y giras de estudio inolvidables.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Navegación</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/paquetes">Paquetes Turísticos</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Condiciones Generales</a></li>
+                    <li><a href="#">Términos de Uso</a></li>
+                    <li><a href="#">Derecho de Retracto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <div class="contact-info">
+                    <p>📧 info@grupowonderchile.com</p>
+                    <p>📞 +56 9 1234 5678</p>
+                    <p>📍 Santiago, Chile</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Grupowonderchile. Todos los derechos reservados.</p>
+            <p>Diseñado y programado por Lilith 🦇 con pasión por los viajes</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WonderChile - Turismo en Chile y el Mundo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            {% if session.user_id %}
+                <a href="/carrito" style="text-decoration: none; color: white;"><h1>WonderChile</h1></a>
+            {% else %}
+                <a href="/login" style="text-decoration: none; color: white;"><h1>WonderChile</h1></a>
+            {% endif %}
+            <p>Descubre la magia de Chile y el mundo</p>
+        </div>
+        <div class="header-right">
+            {% if session.user_id %}
+                {% if user_name %}
+                    <span>Bienvenido, {{ user_name }}</span>
+                {% endif %}
+                {% if user_role == 'admin' %}
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn" onclick="toggleAdminDropdown()">Admin ▼</a>
+                        <div class="dropdown-content">
+                            <a href="/admin">Panel de Administración</a>
+                            <a href="/admin/viajes">Gestionar Viajes</a>
+                            <a href="/admin/promociones">Gestionar Promociones</a>
+                            <a href="/admin/viajes/agregar">Agregar Viaje</a>
+                            <a href="/admin/promociones/agregar">Agregar Promoción</a>
+                        </div>
+                    </div>
+                {% endif %}
+                <a href="/carrito">Mi Carrito</a>
+                <a href="/logout">Cerrar Sesión</a>
+            {% else %}
+                <a href="/registro">Registro</a>
+                <a href="/login">Iniciar Sesión</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <nav>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <ul id="nav-menu">
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/paquetes">Paquetes Turísticos</a></li>
+            <li><a href="/giras">Giras de Estudio</a></li>
+            <li><a href="/mujeres">Viajes Solo Mujeres</a></li>
+            <li><a href="/contacto">Viaje a Medida</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div>
+            <h1>¡Descubre la Magia de Viajar!</h1>
+            <p>Embárcate en aventuras inolvidables desde los desiertos de Chile hasta los glaciares del mundo. ¡Tu próxima gran experiencia te espera!</p>
+        </div>
+    </section>
+
+    <main>
+
+        <section id="nosotros" class="section">
+            <h2>Misión y Visión - Grupo Wonder Chile</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-content">
+                        <h3>🎯 Nuestra Misión</h3>
+                        <p>Brindar experiencias de viaje inolvidables a través de paquetes turísticos personalizados, giras de estudio educativas y viajes a medida que conecten a las personas con la diversidad cultural y natural del mundo, fomentando el respeto por el medio ambiente y las comunidades locales.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3>🔭 Nuestra Visión</h3>
+                        <p>Ser la agencia de viajes líder en experiencias grupales y educativas en Chile y Latinoamérica, reconocida por nuestra innovación, compromiso con la sostenibilidad y capacidad para crear conexiones significativas entre viajeros y destinos únicos alrededor del mundo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="paquetes" class="section">
+            <h2>Paquetes Turísticos</h2>
+            <div class="grid">
+                {% for viaje in viajes %}
+                <a href="/paquete/{{ viaje.id }}" class="card-link">
+                    <div class="card">
+                        {% if viaje.imagen %}
+                            <img src="{{ viaje.imagen }}" alt="{{ viaje.titulo }}">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="{{ viaje.titulo }}">
+                        {% endif %}
+                        <div class="card-content">
+                            <h3>{{ viaje.titulo }}</h3>
+                            <p>{{ viaje.descripcion }}</p>
+                            <p class="precio">Precio: ${{ viaje.precio }}</p>
+                            <button class="btn-cart" onclick="event.preventDefault(); agregarAlCarrito('{{ viaje.titulo }}')">🛒 Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section id="giras" class="section">
+            <h2>Giras de Estudio</h2>
+            <div class="grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Gira Educativa">
+                    <div class="card-content">
+                        <h3>Giras Educativas</h3>
+                        <p>Experiencias de aprendizaje únicas para estudiantes de todos los niveles, combinando educación con aventura.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Intercambio Cultural">
+                    <div class="card-content">
+                        <h3>Intercambio Cultural</h3>
+                        <p>Programas de inmersión cultural que permiten a los estudiantes vivir experiencias auténticas en diferentes países.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Investigación Científica">
+                    <div class="card-content">
+                        <h3>Investigación Científica</h3>
+                        <p>Giras especializadas para estudiantes de ciencias que incluyen visitas a centros de investigación y laboratorios.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="actividades" class="section">
+            <h2>Actividades</h2>
+            <div class="grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Senderismo">
+                    <div class="card-content">
+                        <h3>Senderismo</h3>
+                        <p>Recorre senderos increíbles en parques nacionales y reservas naturales alrededor del mundo.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Observación de ballenas">
+                    <div class="card-content">
+                        <h3>Observación de Ballenas</h3>
+                        <p>Observa ballenas y vida marina en las costas de Chile, Argentina y otros países.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Escalada en hielo">
+                    <div class="card-content">
+                        <h3>Escalada en Hielo</h3>
+                        <p>Desafía los glaciares patagónicos y otros glaciares del mundo con guías expertos.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1544551763-77ef2ea0e324?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Buceo">
+                    <div class="card-content">
+                        <h3>Buceo</h3>
+                        <p>Explora arrecifes de coral en el Caribe, el Pacífico y el Índico.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Aventura cultural">
+                    <div class="card-content">
+                        <h3>Aventura Cultural</h3>
+                        <p>Descubre antiguas civilizaciones y culturas milenarias en todo el planeta.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Safari">
+                    <div class="card-content">
+                        <h3>Safari Africano</h3>
+                        <p>Observa la fauna salvaje en las reservas de África y otros continentes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="instagram" class="section">
+            <h2>📸 Síguenos en Instagram</h2>
+            <div id="instagram-photos" class="grid">
+                <!-- Las fotos de Instagram se cargarán aquí dinámicamente -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Grupowonderchile</h3>
+                <p>Agencia de viajes especializada en experiencias grupales, planificación personalizada y giras de estudio inolvidables.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Navegación</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="#destinos">Paquetes Turísticos</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Condiciones Generales</a></li>
+                    <li><a href="#">Términos de Uso</a></li>
+                    <li><a href="#">Derecho de Retracto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <div class="contact-info">
+                    <p>📧 info@grupowonderchile.com</p>
+                    <p>📞 +56 9 1234 5678</p>
+                    <p>📍 Santiago, Chile</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Grupowonderchile. Todos los derechos reservados.</p>
+            <p>Diseñado y programado por Lilith 🦇 con pasión por los viajes</p>
+        </div>
+    </footer>
+</body>
+</html>

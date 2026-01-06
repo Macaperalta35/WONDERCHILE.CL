@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Promociones - WonderChile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>WonderChile</h1>
+            <p>Descubre la magia de Chile y el mundo</p>
+        </div>
+        <div class="header-right">
+            {% if session.user_id %}
+                {% if user_name %}
+                    <span>Bienvenido, {{ user_name }}</span>
+                {% endif %}
+                <a href="/admin">Panel de Administración</a>
+                <a href="/logout">Cerrar Sesión</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/paquetes">Paquetes Turísticos</a></li>
+            <li><a href="/giras">Giras de Estudio</a></li>
+            <li><a href="/mujeres">Viajes Solo Mujeres</a></li>
+            <li><a href="/contacto">Viaje a Medida</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="section">
+            <h2>Administrar Promociones</h2>
+            <a href="/admin/promociones/agregar" class="btn">Agregar Nueva Promoción</a>
+            <br><br>
+
+            {% if promociones %}
+                <div class="grid">
+                    {% for promocion in promociones %}
+                        <div class="card">
+                            {% if promocion.imagen %}
+                                <img src="{{ promocion.imagen }}" alt="{{ promocion.titulo }}">
+                            {% endif %}
+                            <div class="card-content">
+                                <h3>{{ promocion.titulo }}</h3>
+                                <p>{{ promocion.descripcion }}</p>
+                                <p><strong>Descuento: {{ promocion.descuento }}%</strong></p>
+                                <a href="/admin/promociones/{{ promocion.id }}/editar" class="btn">Editar</a>
+                                <form method="POST" action="/admin/promociones/{{ promocion.id }}/delete" style="display: inline;">
+                                    <button type="submit" class="btn" onclick="return confirm('¿Estás seguro de eliminar esta promoción?')">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No hay promociones registradas.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Grupowonderchile</h3>
+                <p>Agencia de viajes especializada en experiencias grupales, planificación personalizada y giras de estudio inolvidables.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Grupowonderchile. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

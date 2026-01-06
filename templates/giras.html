@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giras de Estudio - WonderChile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>WonderChile</h1>
+            <p>Descubre la magia de Chile y el mundo</p>
+        </div>
+        <div class="header-right">
+            {% if session.user_id %}
+                <a href="/carrito">Mi Carrito</a>
+                <a href="/logout">Cerrar Sesión</a>
+            {% else %}
+                <a href="/registro">Registro</a>
+                <a href="/login">Iniciar Sesión</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <nav>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <ul id="nav-menu">
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/paquetes">Paquetes Turísticos</a></li>
+            <li><a href="/giras">Giras de Estudio</a></li>
+            <li><a href="/mujeres">Viajes Solo Mujeres</a></li>
+            <li><a href="/contacto">Viaje a Medida</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div>
+            <h1>¡Giras de Estudio Transformadoras!</h1>
+            <p>Experiencias educativas únicas que fusionan el aprendizaje apasionante con aventuras inolvidables para estudiantes de todas las edades</p>
+        </div>
+    </section>
+
+    <main>
+
+        <section class="section">
+            <h2>¡Programas Educativos que Inspiran!</h2>
+            <div class="grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Gira Educativa">
+                    <div class="card-content">
+                        <h3>Giras Educativas</h3>
+                        <p>Experiencias de aprendizaje únicas para estudiantes de todos los niveles, combinando educación con aventura.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Gira Educativa')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Intercambio Cultural">
+                    <div class="card-content">
+                        <h3>Intercambio Cultural</h3>
+                        <p>Programas de inmersión cultural que permiten a los estudiantes vivir experiencias auténticas en diferentes países.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Intercambio Cultural')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Investigación Científica">
+                    <div class="card-content">
+                        <h3>Investigación Científica</h3>
+                        <p>Giras especializadas para estudiantes de ciencias que incluyen visitas a centros de investigación y laboratorios.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Investigación Científica')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Arte y Cultura">
+                    <div class="card-content">
+                        <h3>Arte y Cultura</h3>
+                        <p>Exploración de museos, galerías y manifestaciones culturales en destinos seleccionados.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Arte y Cultura')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Idiomas en el Extranjero">
+                    <div class="card-content">
+                        <h3>Idiomas en el Extranjero</h3>
+                        <p>Programas intensivos de aprendizaje de idiomas con inmersión cultural completa.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Idiomas en el Extranjero')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Deportes y Aventura">
+                    <div class="card-content">
+                        <h3>Deportes y Aventura</h3>
+                        <p>Actividades deportivas y de aventura combinadas con aprendizaje y trabajo en equipo.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Deportes y Aventura')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Grupowonderchile</h3>
+                <p>Agencia de viajes especializada en experiencias grupales, planificación personalizada y giras de estudio inolvidables.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Navegación</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/paquetes">Paquetes Turísticos</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Condiciones Generales</a></li>
+                    <li><a href="#">Términos de Uso</a></li>
+                    <li><a href="#">Derecho de Retracto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <div class="contact-info">
+                    <p>📧 info@grupowonderchile.com</p>
+                    <p>📞 +56 9 1234 5678</p>
+                    <p>📍 Santiago, Chile</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Grupowonderchile. Todos los derechos reservados.</p>
+            <p>Diseñado y programado por Lilith (murciélago) con pasión por los viajes</p>
+        </div>
+    </footer>
+
+    <script>
+        function agregarAlCarrito(paquete) {
+            fetch('/verificar_sesion')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.logged_in) {
+                    alert('Debes iniciar sesión para agregar productos al carrito');
+                    window.location.href = '/login';
+                    return;
+                }
+
+                return fetch('/agregar_carrito', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ paquete: paquete })
+                });
+            })
+            .then(response => {
+                if (response) {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                if (data && data.success) {
+                    alert('¡Producto agregado al carrito!');
+                } else if (data) {
+                    alert('Error al agregar al carrito: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al procesar la solicitud');
+            });
+        }
+
+        function toggleMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            navMenu.classList.toggle('show');
+        }
+
+        // Cerrar menú al hacer clic fuera de él
+        document.addEventListener('click', function(event) {
+            const nav = document.querySelector('nav');
+            const navMenu = document.getElementById('nav-menu');
+            const menuToggle = document.querySelector('.menu-toggle');
+
+            if (!nav.contains(event.target)) {
+                navMenu.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

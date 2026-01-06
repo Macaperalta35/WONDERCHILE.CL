@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - WonderChile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>WonderChile</h1>
+            <p>Descubre la magia de Chile y el mundo</p>
+        </div>
+        <div class="header-right">
+            {% if session.user_id %}
+                <a href="/carrito">Mi Carrito</a>
+                <a href="/logout">Cerrar Sesión</a>
+            {% else %}
+                <a href="/registro">Registro</a>
+                <a href="/login">Iniciar Sesión</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/paquetes">Paquetes Turísticos</a></li>
+            <li><a href="/giras">Giras de Estudio</a></li>
+            <li><a href="/mujeres">Viajes Solo Mujeres</a></li>
+            <li><a href="/contacto">Viaje a Medida</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="login-form">
+            <h2>Iniciar Sesión</h2>
+            <p>Accede a tu cuenta para gestionar tus reservas y preferencias</p>
+
+            <form action="/login" method="post">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                {% if error %}
+                    <p style="color: red;">{{ error }}</p>
+                {% endif %}
+
+                <button type="submit">Iniciar Sesión</button>
+            </form>
+
+            <div class="register-link">
+                <p>¿No tienes cuenta? <a href="/registro">Regístrate aquí</a></p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

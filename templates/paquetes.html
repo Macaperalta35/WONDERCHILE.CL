@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paquetes Turísticos - WonderChile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            {% if session.user_id %}
+                <a href="/carrito" style="text-decoration: none; color: white;"><h1>WonderChile</h1></a>
+            {% else %}
+                <a href="/login" style="text-decoration: none; color: white;"><h1>WonderChile</h1></a>
+            {% endif %}
+            <p>Descubre la magia de Chile y el mundo</p>
+        </div>
+        <div class="header-right">
+            {% if session.user_id %}
+                <a href="/carrito">Mi Carrito</a>
+                <a href="/logout">Cerrar Sesión</a>
+            {% else %}
+                <a href="/registro">Registro</a>
+                <a href="/login">Iniciar Sesión</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <nav>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <ul id="nav-menu">
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/paquetes">Paquetes Turísticos</a></li>
+            <li><a href="/giras">Giras de Estudio</a></li>
+            <li><a href="/mujeres">Viajes Solo Mujeres</a></li>
+            <li><a href="/contacto">Viaje a Medida</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div>
+            <h1>¡Paquetes Turísticos Inolvidables!</h1>
+            <p>Descubre los destinos más fascinantes del mundo con nuestros paquetes exclusivos, diseñados para crear recuerdos eternos</p>
+        </div>
+    </section>
+
+    <main>
+
+        <section class="section">
+            <h2>Nuestros Paquetes Turísticos</h2>
+            <div class="grid">
+                {% for viaje in viajes %}
+                <a href="/paquete/{{ viaje.id }}" class="card-link">
+                    <div class="card">
+                        {% if viaje.imagen %}
+                            <img src="{{ viaje.imagen }}" alt="{{ viaje.titulo }}">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="{{ viaje.titulo }}">
+                        {% endif %}
+                        <div class="card-content">
+                            <h3>{{ viaje.titulo }}</h3>
+                            <p>{{ viaje.descripcion }}</p>
+                            <p class="precio">Precio: ${{ viaje.precio }}</p>
+                            <button class="btn-cart" onclick="event.preventDefault(); agregarAlCarrito('{{ viaje.titulo }}')">🛒 Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Grupowonderchile</h3>
+                <p>Agencia de viajes especializada en experiencias grupales, planificación personalizada y giras de estudio inolvidables.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Navegación</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/paquetes">Paquetes Turísticos</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Condiciones Generales</a></li>
+                    <li><a href="#">Términos de Uso</a></li>
+                    <li><a href="#">Derecho de Retracto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <div class="contact-info">
+                    <p>📧 info@grupowonderchile.com</p>
+                    <p>📞 +56 9 1234 5678</p>
+                    <p>📍 Santiago, Chile</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Grupowonderchile. Todos los derechos reservados.</p>
+            <p>Diseñado y programado por Lilith (murciélago) con pasión por los viajes</p>
+        </div>
+    </footer>
+</body>
+</html>

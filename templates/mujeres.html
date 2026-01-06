@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viajes Solo Mujeres - WonderChile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>WonderChile</h1>
+            <p>Descubre la magia de Chile y el mundo</p>
+        </div>
+        <div class="header-right">
+            {% if session.user_id %}
+                <a href="/carrito">Mi Carrito</a>
+                <a href="/logout">Cerrar Sesión</a>
+            {% else %}
+                <a href="/registro">Registro</a>
+                <a href="/login">Iniciar Sesión</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <nav>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <ul id="nav-menu">
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/paquetes">Paquetes Turísticos</a></li>
+            <li><a href="/giras">Giras de Estudio</a></li>
+            <li><a href="/mujeres">Viajes Solo Mujeres</a></li>
+            <li><a href="/contacto">Viaje a Medida</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div>
+            <h1>¡Viajes Solo Mujeres: Empodérate y Conecta!</h1>
+            <p>Experiencias seguras y empoderadoras diseñadas exclusivamente para mujeres, donde la aventura se encuentra con la sororidad</p>
+        </div>
+    </section>
+
+    <main>
+
+        <section class="section">
+            <h2>Viajes Exclusivos para Mujeres</h2>
+            <p>En WonderChile creemos en el poder de viajar en comunidad. Nuestros viajes solo para mujeres ofrecen un espacio seguro donde puedes conectar, crecer y explorar el mundo con confianza.</p>
+        </section>
+
+        <section class="section">
+            <h2>Experiencias Destacadas</h2>
+            <div class="grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Retiro de Yoga">
+                    <div class="card-content">
+                        <h3>Retiro de Yoga y Meditación</h3>
+                        <p>Encuentra paz interior en retiros exclusivos para mujeres, combinando yoga, meditación y conexión con la naturaleza.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Retiro de Yoga y Meditación')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Viaje Cultural Femenino">
+                    <div class="card-content">
+                        <h3>Viaje Cultural Femenino</h3>
+                        <p>Explora la historia y cultura desde la perspectiva de las mujeres que han marcado el camino.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Viaje Cultural Femenino')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Aventura en la Naturaleza">
+                    <div class="card-content">
+                        <h3>Aventura en la Naturaleza</h3>
+                        <p>Actividades al aire libre diseñadas para mujeres, desde senderismo hasta observación de aves.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Aventura en la Naturaleza')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Taller de Empoderamiento">
+                    <div class="card-content">
+                        <h3>Taller de Empoderamiento</h3>
+                        <p>Viajes que incluyen talleres de crecimiento personal, liderazgo y desarrollo profesional.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Taller de Empoderamiento')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Gastronomía Femenina">
+                    <div class="card-content">
+                        <h3>Gastronomía Femenina</h3>
+                        <p>Descubre la cocina tradicional y moderna a través de experiencias culinarias lideradas por mujeres chef.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Gastronomía Femenina')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Deportes y Fitness">
+                    <div class="card-content">
+                        <h3>Deportes y Fitness</h3>
+                        <p>Actividades deportivas y de bienestar adaptadas para mujeres, desde running hasta pilates en la playa.</p>
+                        <button class="btn-cart" onclick="agregarAlCarrito('Deportes y Fitness')">🛒 Agregar al Carrito</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>¿Por qué viajar solo con mujeres?</h2>
+            <div class="grid">
+                <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                    <h3>🌸 Ambiente Seguro</h3>
+                    <p>Un espacio libre de juicios donde puedes ser tú misma y conectar con otras mujeres en un entorno de confianza.</p>
+                </div>
+                <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                    <h3>💪 Empoderamiento</h3>
+                    <p>Experiencias diseñadas para fortalecer tu confianza, independencia y capacidad de liderazgo.</p>
+                </div>
+                <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                    <h3>🤝 Comunidad</h3>
+                    <p>Conecta con mujeres de diferentes edades y backgrounds que comparten tu pasión por los viajes.</p>
+                </div>
+                <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                    <h3>🎯 Enfoque Personalizado</h3>
+                    <p>Actividades y experiencias pensadas específicamente para las necesidades e intereses de las mujeres.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Grupowonderchile</h3>
+                <p>Agencia de viajes especializada en experiencias grupales, planificación personalizada y giras de estudio inolvidables.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Navegación</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/paquetes">Paquetes Turísticos</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Condiciones Generales</a></li>
+                    <li><a href="#">Términos de Uso</a></li>
+                    <li><a href="#">Derecho de Retracto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <div class="contact-info">
+                    <p>📧 info@grupowonderchile.com</p>
+                    <p>📞 +56 9 1234 5678</p>
+                    <p>📍 Santiago, Chile</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Grupowonderchile. Todos los derechos reservados.</p>
+            <p>Diseñado y programado por Lilith (murciélago) con pasión por los viajes</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

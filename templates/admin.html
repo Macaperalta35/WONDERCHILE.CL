@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - WonderChile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>WonderChile</h1>
+            <p>Descubre la magia de Chile y el mundo</p>
+        </div>
+        <div class="header-right">
+            {% if session.user_id %}
+                {% if user_name %}
+                    <span>Bienvenido, {{ user_name }}</span>
+                {% endif %}
+                <a href="/logout">Cerrar Sesión</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/admin">Panel Admin</a></li>
+            <li><a href="/admin/viajes">Viajes</a></li>
+            <li><a href="/admin/promociones">Promociones</a></li>
+            <li><a href="/">Inicio</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="admin-section">
+            <h2>Gestión de Usuarios</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Fecha de Registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.id }}</td>
+                        <td>{{ usuario.nombre }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>
+                            <form method="post" action="/admin/usuario/{{ usuario.id }}/role" style="display: inline;">
+                                <select name="role" class="role-select" onchange="this.form.submit()">
+                                    <option value="user" {% if usuario.role == 'user' %}selected{% endif %}>Usuario</option>
+                                    <option value="admin" {% if usuario.role == 'admin' %}selected{% endif %}>Administrador</option>
+                                </select>
+                            </form>
+                        </td>
+                        <td>{{ usuario.fecha_registro }}</td>
+                        <td>
+                            <form method="post" action="/admin/usuario/{{ usuario.id }}/delete" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este usuario?')">
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="admin-section">
+            <h2>Gestión de Contactos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Mensaje</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contacto in contactos %}
+                    <tr>
+                        <td>{{ contacto.id }}</td>
+                        <td>{{ contacto.nombre }}</td>
+                        <td>{{ contacto.email }}</td>
+                        <td>{{ contacto.mensaje[:50] }}{% if contacto.mensaje|length > 50 %}...{% endif %}</td>
+                        <td>{{ contacto.fecha }}</td>
+                        <td>
+                            <form method="post" action="/admin/contacto/{{ contacto.id }}/delete" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este contacto?')">
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="admin-section">
+            <h2>Gestión del Carrito</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Paquete</th>
+                        <th>Fecha Agregado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for carrito in carritos %}
+                    <tr>
+                        <td>{{ carrito.id }}</td>
+                        <td>{{ carrito.usuario }}</td>
+                        <td>{{ carrito.paquete }}</td>
+                        <td>{{ carrito.fecha_agregado }}</td>
+                        <td>
+                            <form method="post" action="/admin/carrito/{{ carrito.id }}/delete" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este item del carrito?')">
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

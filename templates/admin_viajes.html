@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Viajes - WonderChile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>WonderChile</h1>
+            <p>Descubre la magia de Chile y el mundo</p>
+        </div>
+        <div class="header-right">
+            {% if session.user_id %}
+                {% if user_name %}
+                    <span>Bienvenido, {{ user_name }}</span>
+                {% endif %}
+                <a href="/admin">Panel de Administración</a>
+                <a href="/logout">Cerrar Sesión</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/paquetes">Paquetes Turísticos</a></li>
+            <li><a href="/giras">Giras de Estudio</a></li>
+            <li><a href="/mujeres">Viajes Solo Mujeres</a></li>
+            <li><a href="/contacto">Viaje a Medida</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="section">
+            <h2>Administrar Viajes</h2>
+            <a href="/admin/viajes/agregar" class="btn">Agregar Nuevo Viaje</a>
+            <br><br>
+
+            {% if viajes %}
+                <div class="grid">
+                    {% for viaje in viajes %}
+                        <div class="card">
+                            {% if viaje.imagen %}
+                                <img src="{{ viaje.imagen }}" alt="{{ viaje.titulo }}">
+                            {% endif %}
+                            <div class="card-content">
+                                <h3>{{ viaje.titulo }}</h3>
+                                <p>{{ viaje.descripcion }}</p>
+                                <p><strong>Precio: ${{ viaje.precio }}</strong></p>
+                                <a href="/admin/viajes/{{ viaje.id }}/editar" class="btn">Editar</a>
+                                <form method="POST" action="/admin/viajes/{{ viaje.id }}/delete" style="display: inline;">
+                                    <button type="submit" class="btn" onclick="return confirm('¿Estás seguro de eliminar este viaje?')">Eliminar</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No hay viajes registrados.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Grupowonderchile</h3>
+                <p>Agencia de viajes especializada en experiencias grupales, planificación personalizada y giras de estudio inolvidables.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Grupowonderchile. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
