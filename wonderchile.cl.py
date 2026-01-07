@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-app.secret_key = 'tu_clave_secreta_aqui'  # Cambia esto en producción
+app.secret_key = os.environ.get('SECRET_KEY', 'tu_clave_secreta_aqui')
 
 # Configuración de uploads
 UPLOAD_FOLDER = 'static/uploads'
