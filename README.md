@@ -61,6 +61,8 @@ wonderchile/
 │   └── contacto.html
 └── wonderchile.db       # Base de datos SQLite (se crea automáticamente)
 ```
+admin_email = "admin@wonderchile.cl"
+    admin_password = generate_password_hash("Admin123")
 
 ## Base de Datos
 
