@@ -82,7 +82,30 @@ def init_db():
             imagen TEXT,
             fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )''')
+        
+        # Verificar si la tabla viajes está vacía e insertar datos iniciales
+        try:
+            count = db.execute('SELECT COUNT(*) FROM viajes').fetchone()[0]
+            if count == 0:
+                viajes = [
+                    ('Tour por Santiago', 'Descubre la capital de Chile con un tour guiado por los principales atractivos históricos y culturales.', 50000, '/static/uploads/tour_santiago.jpg'),
+                    ('Aventura en Cajón del Maipo', 'Explora el río y las montañas en una emocionante aventura de rafting y trekking.', 75000, '/static/uploads/cajon_maipo.jpg'),
+                    ('Viñedos de Maipo Valley', 'Degusta los mejores vinos chilenos en una visita a los viñedos más prestigiosos del valle.', 60000, '/static/uploads/vinedos_maipo.jpg'),
+                    ('Puerto Varas y Lagos', 'Relájate en los hermosos lagos del sur de Chile con vistas espectaculares.', 80000, '/static/uploads/puerto_varas.jpg'),
+                    ('Torres del Paine', 'Vive la experiencia única del parque nacional Torres del Paine con glaciares y fauna.', 120000, '/static/uploads/torres_paine.jpg'),
+                    ('Desierto de Atacama', 'Admira el desierto más árido del mundo con cielos estrellados y geiseres.', 95000, '/static/uploads/atacama.jpg'),
+                    ('Isla de Pascua', 'Explora las misteriosas estatuas moai en la isla más remota del mundo.', 150000, '/static/uploads/isla_pascua.jpg'),
+                    ('Valparaíso y Viña del Mar', 'Disfruta del encanto bohemio de Valparaíso y las playas de Viña del Mar.', 55000, '/static/uploads/valparaiso.jpg')
+                ]
+                db.executemany('INSERT INTO viajes (titulo, descripcion, precio, imagen) VALUES (?, ?, ?, ?)', viajes)
+                logger.info("Datos de viajes iniciales insertados.")
+        except Exception as e:
+            logger.error(f"Error al verificar/poblar viajes: {e}")
+
         db.commit()
+
+# Inicializar la base de datos al importar el módulo (para Render/Gunicorn)
+init_db()
 
 @app.route('/')
 def home():
@@ -418,5 +441,4 @@ def eliminar_promocion(promocion_id):
     return redirect(url_for('admin_promociones'))
 
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)
