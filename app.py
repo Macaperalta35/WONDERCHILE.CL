@@ -141,6 +141,24 @@ def logout():
     session.clear()
     return redirect(url_for("home"))
 
+@app.route("/paquetes")
+def paquetes():
+    db = get_db()
+    viajes = db.execute("SELECT * FROM viajes").fetchall()
+    return render_template("paquetes.html", viajes=viajes)
+
+@app.route("/giras")
+def giras():
+    return render_template("giras.html")
+
+@app.route("/mujeres")
+def mujeres():
+    return render_template("mujeres.html")
+
+@app.route("/contacto")
+def contacto():
+    return render_template("contacto.html")
+
 # --------------------------------------------------
 # ADMIN
 # --------------------------------------------------
@@ -157,6 +175,222 @@ def admin_viajes():
     db = get_db()
     viajes = db.execute("SELECT * FROM viajes").fetchall()
     return render_template("admin_viajes.html", viajes=viajes)
+
+@app.route("/admin/viajes/agregar", methods=["GET", "POST"])
+def agregar_viaje():
+    if session.get("user_role") != "admin":
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        titulo = request.form.get("titulo")
+        descripcion = request.form.get("descripcion")
+        precio = request.form.get("precio")
+        imagen_opcion = request.form.get("imagen_opcion")
+
+        if not titulo or not descripcion or not precio:
+            return "Error: Todos los campos son obligatorios"
+
+        imagen_path = None
+
+        if imagen_opcion == "upload":
+            if "imagen_file" not in request.files:
+                return "Error: No se encontró el archivo de imagen"
+            file = request.files["imagen_file"]
+            if file.filename == "":
+                return "Error: No se seleccionó ningún archivo"
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                file.save(file_path)
+                imagen_path = f"/static/uploads/{filename}"
+            else:
+                return "Error: Tipo de archivo no permitido. Solo se permiten imágenes (png, jpg, jpeg, gif, webp)"
+        else:
+            imagen_path = request.form.get("imagen")
+
+        db = get_db()
+        db.execute(
+            "INSERT INTO viajes (titulo, descripcion, precio, imagen) VALUES (?, ?, ?, ?)",
+            (titulo, descripcion, precio, imagen_path)
+        )
+        db.commit()
+
+        return redirect(url_for("admin_viajes"))
+
+    return render_template("agregar_viaje.html")
+
+@app.route("/admin/viajes/<int:viaje_id>/editar", methods=["GET", "POST"])
+def editar_viaje(viaje_id):
+    if session.get("user_role") != "admin":
+        return redirect(url_for("login"))
+
+    db = get_db()
+    viaje = db.execute("SELECT * FROM viajes WHERE id = ?", (viaje_id,)).fetchone()
+
+    if not viaje:
+        return "Viaje no encontrado"
+
+    if request.method == "POST":
+        titulo = request.form.get("titulo")
+        descripcion = request.form.get("descripcion")
+        precio = request.form.get("precio")
+        imagen_opcion = request.form.get("imagen_opcion")
+
+        if not titulo or not descripcion or not precio:
+            return "Error: Todos los campos son obligatorios"
+
+        imagen_path = viaje["imagen"]
+
+        if imagen_opcion == "upload":
+            if "imagen_file" not in request.files:
+                return "Error: No se encontró el archivo de imagen"
+            file = request.files["imagen_file"]
+            if file.filename == "":
+                return "Error: No se seleccionó ningún archivo"
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                file.save(file_path)
+                imagen_path = f"/static/uploads/{filename}"
+            else:
+                return "Error: Tipo de archivo no permitido. Solo se permiten imágenes (png, jpg, jpeg, gif, webp)"
+        else:
+            nueva_imagen = request.form.get("imagen")
+            if nueva_imagen:
+                imagen_path = nueva_imagen
+
+        db.execute(
+            "UPDATE viajes SET titulo = ?, descripcion = ?, precio = ?, imagen = ? WHERE id = ?",
+            (titulo, descripcion, precio, imagen_path, viaje_id)
+        )
+        db.commit()
+
+        return redirect(url_for("admin_viajes"))
+
+    return render_template("editar_viaje.html", viaje=viaje)
+
+@app.route("/admin/viajes/<int:viaje_id>/delete", methods=["POST"])
+def eliminar_viaje(viaje_id):
+    if session.get("user_role") != "admin":
+        return redirect(url_for("login"))
+
+    db = get_db()
+    db.execute("DELETE FROM viajes WHERE id = ?", (viaje_id,))
+    db.commit()
+
+    return redirect(url_for("admin_viajes"))
+
+@app.route("/admin/promociones")
+def admin_promociones():
+    if session.get("user_role") != "admin":
+        return redirect(url_for("login"))
+    db = get_db()
+    promociones = db.execute("SELECT * FROM promociones").fetchall()
+    return render_template("admin_promociones.html", promociones=promociones)
+
+@app.route("/admin/promociones/agregar", methods=["GET", "POST"])
+def agregar_promocion():
+    if session.get("user_role") != "admin":
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        titulo = request.form.get("titulo")
+        descripcion = request.form.get("descripcion")
+        descuento = request.form.get("descuento")
+        imagen_opcion = request.form.get("imagen_opcion")
+
+        if not titulo or not descripcion or not descuento:
+            return "Error: Todos los campos son obligatorios"
+
+        imagen_path = None
+
+        if imagen_opcion == "upload":
+            if "imagen_file" not in request.files:
+                return "Error: No se encontró el archivo de imagen"
+            file = request.files["imagen_file"]
+            if file.filename == "":
+                return "Error: No se seleccionó ningún archivo"
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                file.save(file_path)
+                imagen_path = f"/static/uploads/{filename}"
+            else:
+                return "Error: Tipo de archivo no permitido. Solo se permiten imágenes (png, jpg, jpeg, gif, webp)"
+        else:
+            imagen_path = request.form.get("imagen")
+
+        db = get_db()
+        db.execute(
+            "INSERT INTO promociones (titulo, descripcion, descuento, imagen) VALUES (?, ?, ?, ?)",
+            (titulo, descripcion, descuento, imagen_path)
+        )
+        db.commit()
+
+        return redirect(url_for("admin_promociones"))
+
+    return render_template("agregar_promocion.html")
+
+@app.route("/admin/promociones/<int:promocion_id>/editar", methods=["GET", "POST"])
+def editar_promocion(promocion_id):
+    if session.get("user_role") != "admin":
+        return redirect(url_for("login"))
+
+    db = get_db()
+    promocion = db.execute("SELECT * FROM promociones WHERE id = ?", (promocion_id,)).fetchone()
+
+    if not promocion:
+        return "Promoción no encontrada"
+
+    if request.method == "POST":
+        titulo = request.form.get("titulo")
+        descripcion = request.form.get("descripcion")
+        descuento = request.form.get("descuento")
+        imagen_opcion = request.form.get("imagen_opcion")
+
+        if not titulo or not descripcion or not descuento:
+            return "Error: Todos los campos son obligatorios"
+
+        imagen_path = promocion["imagen"]
+
+        if imagen_opcion == "upload":
+            if "imagen_file" not in request.files:
+                return "Error: No se encontró el archivo de imagen"
+            file = request.files["imagen_file"]
+            if file.filename == "":
+                return "Error: No se seleccionó ningún archivo"
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                file.save(file_path)
+                imagen_path = f"/static/uploads/{filename}"
+            else:
+                return "Error: Tipo de archivo no permitido. Solo se permiten imágenes (png, jpg, jpeg, gif, webp)"
+        else:
+            nueva_imagen = request.form.get("imagen")
+            if nueva_imagen:
+                imagen_path = nueva_imagen
+
+        db.execute(
+            "UPDATE promociones SET titulo = ?, descripcion = ?, descuento = ?, imagen = ? WHERE id = ?",
+            (titulo, descripcion, descuento, imagen_path, promocion_id)
+        )
+        db.commit()
+
+        return redirect(url_for("admin_promociones"))
+
+    return render_template("editar_promocion.html", promocion=promocion)
+
+@app.route("/admin/promociones/<int:promocion_id>/delete", methods=["POST"])
+def eliminar_promocion(promocion_id):
+    if session.get("user_role") != "admin":
+        return redirect(url_for("login"))
+
+    db = get_db()
+    db.execute("DELETE FROM promociones WHERE id = ?", (promocion_id,))
+    db.commit()
+
+    return redirect(url_for("admin_promociones"))
 
 # --------------------------------------------------
 # MAIN
