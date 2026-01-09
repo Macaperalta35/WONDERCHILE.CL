@@ -97,6 +97,52 @@ function cargarFotosInstagram() {
     });
 }
 
+// Función para agregar al carrito con verificación de términos
+function agregarAlCarritoConTerminos(paquete) {
+    // Verificar si los términos están aceptados
+    const termsCheckbox = document.getElementById('accept-terms');
+    if (!termsCheckbox.checked) {
+        alert('Debes aceptar los términos y condiciones para continuar');
+        return;
+    }
+
+    // Verificar si el usuario está logueado haciendo una petición al servidor
+    fetch('/verificar_sesion')
+    .then(response => response.json())
+    .then(data => {
+        if (!data.logged_in) {
+            alert('Debes iniciar sesión para agregar productos al carrito');
+            window.location.href = '/login';
+            return;
+        }
+
+        // Enviar solicitud al servidor para agregar al carrito
+        return fetch('/agregar_carrito', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ paquete: paquete })
+        });
+    })
+    .then(response => {
+        if (response) {
+            return response.json();
+        }
+    })
+    .then(data => {
+        if (data && data.success) {
+            alert('¡Producto agregado al carrito!');
+        } else if (data) {
+            alert('Error al agregar al carrito: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud');
+    });
+}
+
 // Cargar fotos de Instagram cuando la página se carga
 document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('instagram-photos')) {

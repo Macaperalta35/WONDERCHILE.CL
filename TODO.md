@@ -34,6 +34,12 @@
 ## Dependencias
 - [x] Actualizar requirements.txt con Werkzeug
 
+## Mejoras en la Interfaz de Usuario
+- [x] Agregar sección dedicada "Viajes Solo Mujeres" en la página principal
+- [x] Agregar sección de términos y condiciones en la página de detalle de paquete
+- [x] Agregar estilos CSS para la sección de términos y condiciones
+- [x] Actualizar JavaScript para verificar aceptación de términos antes de agregar al carrito
+
 ## Pruebas
 - [ ] Probar login, registro, carrito, funciones de admin
 - [ ] Verificar que las nuevas características funcionen

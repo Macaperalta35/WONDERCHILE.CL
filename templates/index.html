@@ -84,6 +84,7 @@
             <h2>Paquetes Turísticos</h2>
             <div class="grid">
                 {% for viaje in viajes %}
+                {% if 'Mujeres' not in viaje.titulo and 'Gira' not in viaje.titulo %}
                 <a href="/paquete/{{ viaje.id }}" class="card-link">
                     <div class="card">
                         {% if viaje.imagen %}
@@ -99,13 +100,82 @@
                         </div>
                     </div>
                 </a>
+                {% endif %}
                 {% endfor %}
+            </div>
+        </section>
+
+        <section id="mujeres" class="section">
+            <h2>Viajes Solo Mujeres</h2>
+            <div class="grid">
+                {% for viaje in viajes %}
+                {% if 'Mujeres' in viaje.titulo %}
+                <a href="/paquete/{{ viaje.id }}" class="card-link">
+                    <div class="card">
+                        {% if viaje.imagen %}
+                            <img src="{{ viaje.imagen }}" alt="{{ viaje.titulo }}">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="{{ viaje.titulo }}">
+                        {% endif %}
+                        <div class="card-content">
+                            <h3>{{ viaje.titulo }}</h3>
+                            <p>{{ viaje.descripcion }}</p>
+                            <p class="precio">Precio: ${{ viaje.precio }}</p>
+                            <button class="btn-cart" onclick="event.preventDefault(); agregarAlCarrito('{{ viaje.titulo }}')">🛒 Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </a>
+                {% endif %}
+                {% endfor %}
+                {% if not viajes or not any('Mujeres' in viaje.titulo for viaje in viajes) %}
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Viajes Solo Mujeres">
+                    <div class="card-content">
+                        <h3>Viajes Solo Mujeres</h3>
+                        <p>Experiencias seguras y empoderadoras diseñadas exclusivamente para mujeres, donde la aventura se encuentra con la sororidad.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Empoderamiento Femenino">
+                    <div class="card-content">
+                        <h3>Empoderamiento Femenino</h3>
+                        <p>Viajes que promueven la confianza, la independencia y conexiones significativas entre mujeres de todo el mundo.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Aventura Segura">
+                    <div class="card-content">
+                        <h3>Aventura Segura</h3>
+                        <p>Explora el mundo con tranquilidad en grupos exclusivos de mujeres, con guías especializadas y protocolos de seguridad.</p>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </section>
 
         <section id="giras" class="section">
             <h2>Giras de Estudio</h2>
             <div class="grid">
+                {% for viaje in viajes %}
+                {% if 'Gira' in viaje.titulo %}
+                <a href="/paquete/{{ viaje.id }}" class="card-link">
+                    <div class="card">
+                        {% if viaje.imagen %}
+                            <img src="{{ viaje.imagen }}" alt="{{ viaje.titulo }}">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="{{ viaje.titulo }}">
+                        {% endif %}
+                        <div class="card-content">
+                            <h3>{{ viaje.titulo }}</h3>
+                            <p>{{ viaje.descripcion }}</p>
+                            <p class="precio">Precio: ${{ viaje.precio }}</p>
+                            <button class="btn-cart" onclick="event.preventDefault(); agregarAlCarrito('{{ viaje.titulo }}')">🛒 Agregar al Carrito</button>
+                        </div>
+                    </div>
+                </a>
+                {% endif %}
+                {% endfor %}
+                {% if not viajes or not any('Gira' in viaje.titulo for viaje in viajes) %}
                 <div class="card">
                     <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Gira Educativa">
                     <div class="card-content">
@@ -127,6 +197,7 @@
                         <p>Giras especializadas para estudiantes de ciencias que incluyen visitas a centros de investigación y laboratorios.</p>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </section>
 

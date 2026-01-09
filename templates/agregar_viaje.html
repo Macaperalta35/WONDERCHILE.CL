@@ -50,18 +50,46 @@
                     <input type="number" id="precio" name="precio" step="0.01" required>
                 </div>
                 <div>
-                    <label for="imagen_opcion">Opción de Imagen:</label>
+                    <label for="grupo_minimo">Grupo Mínimo:</label>
+                    <input type="text" id="grupo_minimo" name="grupo_minimo" placeholder="Ej: 4 personas">
+                </div>
+                <div>
+                    <label for="alojamiento">Alojamiento:</label>
+                    <textarea id="alojamiento" name="alojamiento" placeholder="Detalles del alojamiento"></textarea>
+                </div>
+                <div>
+                    <label for="alimentacion">Alimentación:</label>
+                    <textarea id="alimentacion" name="alimentacion" placeholder="Detalles de la alimentación"></textarea>
+                </div>
+                <div>
+                    <label for="transporte">Transporte:</label>
+                    <textarea id="transporte" name="transporte" placeholder="Detalles del transporte"></textarea>
+                </div>
+                <div>
+                    <label for="itinerario">Itinerario:</label>
+                    <textarea id="itinerario" name="itinerario" placeholder="Itinerario detallado del viaje"></textarea>
+                </div>
+                <div>
+                    <label for="galeria">Galería de Imágenes (URLs separadas por comas):</label>
+                    <textarea id="galeria" name="galeria" placeholder="https://ejemplo.com/img1.jpg, https://ejemplo.com/img2.jpg"></textarea>
+                </div>
+                <div>
+                    <label for="galeria_files">Subir Imágenes de Galería (múltiples archivos):</label>
+                    <input type="file" id="galeria_files" name="galeria_files" accept="image/*" multiple>
+                </div>
+                <div>
+                    <label for="imagen_opcion">Opción de Imagen Principal:</label>
                     <select id="imagen_opcion" name="imagen_opcion" onchange="toggleImageInput()">
                         <option value="url">URL de Imagen</option>
                         <option value="upload">Subir Archivo</option>
                     </select>
                 </div>
                 <div id="url_input">
-                    <label for="imagen">URL de Imagen (opcional):</label>
+                    <label for="imagen">URL de Imagen Principal (opcional):</label>
                     <input type="url" id="imagen" name="imagen" placeholder="https://ejemplo.com/imagen.jpg">
                 </div>
                 <div id="file_input" style="display: none;">
-                    <label for="imagen_file">Subir Imagen (opcional):</label>
+                    <label for="imagen_file">Subir Imagen Principal (opcional):</label>
                     <input type="file" id="imagen_file" name="imagen_file" accept="image/*">
                 </div>
                 <button type="submit" class="btn">Agregar Viaje</button>

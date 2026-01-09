@@ -1,4 +1,4 @@
-/* Estilos generales para WonderChile - Diseño Instagram-inspired */
+d/* Estilos generales para WonderChile - Diseño Instagram-inspired */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     margin: 0;
@@ -21,6 +21,8 @@ header {
     align-items: center;
     box-shadow: 0 2px 20px rgba(0,0,0,0.1);
     border-bottom: 1px solid rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 10;
 }
 
 .header-left {
@@ -482,7 +484,7 @@ textarea {
     backdrop-filter: blur(10px);
     min-width: 200px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    z-index: 1;
+    z-index: 1000;
     border-radius: 12px;
     top: 100%;
     left: 0;
@@ -981,4 +983,63 @@ nav ul li:hover .dropdown {
     .admin-section td {
         padding: 0.5rem;
     }
+}
+
+/* Terms and Conditions Styles */
+.terms-conditions {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+    border: 1px solid #e9ecef;
+}
+
+.terms-conditions h2 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    border-bottom: 2px solid #f5576c;
+    padding-bottom: 0.5rem;
+}
+
+.terms-content {
+    margin-bottom: 1rem;
+}
+
+.terms-content p {
+    color: #555;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.terms-content ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.terms-content li {
+    margin-bottom: 0.5rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+.terms-acceptance {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.terms-checkbox {
+    margin-right: 0.5rem;
+    transform: scale(1.2);
+}
+
+.terms-acceptance label {
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
 }

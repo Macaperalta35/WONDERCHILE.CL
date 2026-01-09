@@ -83,7 +83,23 @@ def init_db():
         titulo TEXT,
         descripcion TEXT,
         precio REAL,
-        imagen TEXT
+        imagen TEXT,
+        grupo_minimo TEXT,
+        alojamiento TEXT,
+        alimentacion TEXT,
+        transporte TEXT,
+        itinerario TEXT,
+        galeria TEXT
+    )""")
+
+    db.execute("""
+    CREATE TABLE IF NOT EXISTS carrito (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER,
+        viaje_id INTEGER,
+        fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (usuario_id) REFERENCES usuarios (id),
+        FOREIGN KEY (viaje_id) REFERENCES viajes (id)
     )""")
 
     db.execute("""
@@ -184,7 +200,62 @@ def registro():
 def carrito():
     if not session.get("user_id"):
         return redirect(url_for("login"))
-    return render_template("carrito.html")
+
+    db = get_db()
+    items = db.execute("""
+        SELECT c.id, v.titulo as paquete, c.fecha_agregado
+        FROM carrito c
+        JOIN viajes v ON c.viaje_id = v.id
+        WHERE c.usuario_id = ?
+        ORDER BY c.fecha_agregado DESC
+    """, (session["user_id"],)).fetchall()
+
+    return render_template("carrito.html", items=items)
+
+@app.route("/agregar_carrito/<int:viaje_id>", methods=["POST"])
+def agregar_carrito(viaje_id):
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    db = get_db()
+
+    # Verificar que el viaje existe
+    viaje = db.execute("SELECT id FROM viajes WHERE id = ?", (viaje_id,)).fetchone()
+    if not viaje:
+        return "Viaje no encontrado", 404
+
+    # Verificar que no esté ya en el carrito
+    existe = db.execute(
+        "SELECT id FROM carrito WHERE usuario_id = ? AND viaje_id = ?",
+        (session["user_id"], viaje_id)
+    ).fetchone()
+
+    if not existe:
+        db.execute(
+            "INSERT INTO carrito (usuario_id, viaje_id) VALUES (?, ?)",
+            (session["user_id"], viaje_id)
+        )
+        db.commit()
+
+    return redirect(url_for("carrito"))
+
+@app.route("/eliminar_carrito/<int:item_id>", methods=["POST"])
+def eliminar_carrito(item_id):
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    db = get_db()
+    # Verificar que el item pertenece al usuario
+    item = db.execute(
+        "SELECT id FROM carrito WHERE id = ? AND usuario_id = ?",
+        (item_id, session["user_id"])
+    ).fetchone()
+
+    if item:
+        db.execute("DELETE FROM carrito WHERE id = ?", (item_id,))
+        db.commit()
+
+    return redirect(url_for("carrito"))
 
 @app.route("/paquete/<int:viaje_id>")
 def detalle_paquete(viaje_id):
@@ -220,6 +291,12 @@ def agregar_viaje():
         titulo = request.form.get("titulo")
         descripcion = request.form.get("descripcion")
         precio = request.form.get("precio")
+        grupo_minimo = request.form.get("grupo_minimo")
+        alojamiento = request.form.get("alojamiento")
+        alimentacion = request.form.get("alimentacion")
+        transporte = request.form.get("transporte")
+        itinerario = request.form.get("itinerario")
+        galeria = request.form.get("galeria")
         imagen_opcion = request.form.get("imagen_opcion")
 
         if not titulo or not descripcion or not precio:
@@ -243,10 +320,29 @@ def agregar_viaje():
         else:
             imagen_path = request.form.get("imagen")
 
+        # Handle gallery images
+        galeria_paths = []
+        if "galeria_files" in request.files:
+            files = request.files.getlist("galeria_files")
+            for file in files:
+                if file.filename != "" and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                    file.save(file_path)
+                    galeria_paths.append(f"/static/uploads/{filename}")
+
+        # If URLs were provided, add them to the gallery
+        galeria_urls = request.form.get("galeria", "").strip()
+        if galeria_urls:
+            urls = [url.strip() for url in galeria_urls.split(",") if url.strip()]
+            galeria_paths.extend(urls)
+
+        galeria_final = ",".join(galeria_paths) if galeria_paths else None
+
         db = get_db()
         db.execute(
-            "INSERT INTO viajes (titulo, descripcion, precio, imagen) VALUES (?, ?, ?, ?)",
-            (titulo, descripcion, precio, imagen_path)
+            "INSERT INTO viajes (titulo, descripcion, precio, imagen, grupo_minimo, alojamiento, alimentacion, transporte, itinerario, galeria) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (titulo, descripcion, precio, imagen_path, grupo_minimo, alojamiento, alimentacion, transporte, itinerario, galeria_final)
         )
         db.commit()
 
@@ -269,6 +365,12 @@ def editar_viaje(viaje_id):
         titulo = request.form.get("titulo")
         descripcion = request.form.get("descripcion")
         precio = request.form.get("precio")
+        grupo_minimo = request.form.get("grupo_minimo")
+        alojamiento = request.form.get("alojamiento")
+        alimentacion = request.form.get("alimentacion")
+        transporte = request.form.get("transporte")
+        itinerario = request.form.get("itinerario")
+        galeria = request.form.get("galeria")
         imagen_opcion = request.form.get("imagen_opcion")
 
         if not titulo or not descripcion or not precio:
@@ -294,9 +396,29 @@ def editar_viaje(viaje_id):
             if nueva_imagen:
                 imagen_path = nueva_imagen
 
+        # Handle gallery images
+        galeria_paths = []
+        if "galeria_files" in request.files:
+            files = request.files.getlist("galeria_files")
+            for file in files:
+                if file.filename != "" and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                    file.save(file_path)
+                    galeria_paths.append(f"/static/uploads/{filename}")
+
+        # If URLs were provided, add them to the gallery
+        galeria_urls = request.form.get("galeria", "").strip()
+        if galeria_urls:
+            urls = [url.strip() for url in galeria_urls.split(",") if url.strip()]
+            galeria_paths.extend(urls)
+
+        # If no new gallery images were provided, keep the existing ones
+        galeria_final = ",".join(galeria_paths) if galeria_paths else galeria
+
         db.execute(
-            "UPDATE viajes SET titulo = ?, descripcion = ?, precio = ?, imagen = ? WHERE id = ?",
-            (titulo, descripcion, precio, imagen_path, viaje_id)
+            "UPDATE viajes SET titulo = ?, descripcion = ?, precio = ?, imagen = ?, grupo_minimo = ?, alojamiento = ?, alimentacion = ?, transporte = ?, itinerario = ?, galeria = ? WHERE id = ?",
+            (titulo, descripcion, precio, imagen_path, grupo_minimo, alojamiento, alimentacion, transporte, itinerario, galeria_final, viaje_id)
         )
         db.commit()
 

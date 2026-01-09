@@ -207,8 +207,26 @@
                         </div>
                     </div>
 
+                    <div class="terms-conditions">
+                        <h2>Términos y Condiciones</h2>
+                        <div class="terms-content">
+                            <p>Al reservar este paquete turístico, aceptas los siguientes términos:</p>
+                            <ul>
+                                <li>El precio incluye los servicios especificados en la descripción del paquete.</li>
+                                <li>Los pagos se realizan según el calendario establecido al momento de la reserva.</li>
+                                <li>Las cancelaciones deben notificarse con al menos 30 días de anticipación para reembolso parcial.</li>
+                                <li>La agencia no se hace responsable por cambios en itinerarios debido a condiciones climáticas o eventos imprevistos.</li>
+                                <li>Es responsabilidad del pasajero contar con documentos válidos y seguros de viaje.</li>
+                            </ul>
+                            <div class="terms-acceptance">
+                                <input type="checkbox" id="accept-terms" class="terms-checkbox">
+                                <label for="accept-terms">Acepto los términos y condiciones</label>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="action-buttons">
-                        <button class="btn-primary" onclick="agregarAlCarrito('{{ viaje.titulo }}')">🛒 Agregar al Carrito</button>
+                        <button class="btn-primary" onclick="agregarAlCarritoConTerminos('{{ viaje.titulo }}')">🛒 Agregar al Carrito</button>
                         <a href="/contacto" class="btn-secondary">📞 Consultar Disponibilidad</a>
                     </div>
                 </div>
