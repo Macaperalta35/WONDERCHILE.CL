@@ -127,7 +127,13 @@
                 </a>
                 {% endif %}
                 {% endfor %}
-                {% if not viajes or not any('Mujeres' in viaje.titulo for viaje in viajes) %}
+                {% set has_mujeres_viajes = false %}
+                {% for viaje in viajes %}
+                    {% if 'Mujeres' in viaje.titulo %}
+                        {% set has_mujeres_viajes = true %}
+                    {% endif %}
+                {% endfor %}
+                {% if not viajes or not has_mujeres_viajes %}
                 <div class="card">
                     <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Viajes Solo Mujeres">
                     <div class="card-content">
@@ -175,7 +181,13 @@
                 </a>
                 {% endif %}
                 {% endfor %}
-                {% if not viajes or not any('Gira' in viaje.titulo for viaje in viajes) %}
+                {% set has_gira_viajes = false %}
+                {% for viaje in viajes %}
+                    {% if 'Gira' in viaje.titulo %}
+                        {% set has_gira_viajes = true %}
+                    {% endif %}
+                {% endfor %}
+                {% if not viajes or not has_gira_viajes %}
                 <div class="card">
                     <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Gira Educativa">
                     <div class="card-content">
