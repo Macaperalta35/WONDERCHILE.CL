@@ -159,6 +159,41 @@ def mujeres():
 def contacto():
     return render_template("contacto.html")
 
+@app.route("/registro", methods=["GET", "POST"])
+def registro():
+    if request.method == "POST":
+        nombre = request.form["nombre"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        db = get_db()
+        hashed_password = generate_password_hash(password)
+        try:
+            db.execute(
+                "INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)",
+                (nombre, email, hashed_password)
+            )
+            db.commit()
+            return redirect(url_for("login"))
+        except sqlite3.IntegrityError:
+            return "Email ya registrado"
+
+    return render_template("registro.html")
+
+@app.route("/carrito")
+def carrito():
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+    return render_template("carrito.html")
+
+@app.route("/paquete/<int:viaje_id>")
+def detalle_paquete(viaje_id):
+    db = get_db()
+    viaje = db.execute("SELECT * FROM viajes WHERE id = ?", (viaje_id,)).fetchone()
+    if not viaje:
+        return "Paquete no encontrado", 404
+    return render_template("detalle_paquete.html", viaje=viaje)
+
 # --------------------------------------------------
 # ADMIN
 # --------------------------------------------------
