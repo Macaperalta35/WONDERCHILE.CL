@@ -61,6 +61,9 @@
                 <div class="price-tag">
                     <span class="price">${{ viaje.precio }}</span>
                     <span class="per-person">por persona</span>
+                    {% if session.user_id and user_role == 'admin' %}
+                        <a href="/admin/viajes/editar/{{ viaje.id }}" class="btn-secondary" style="margin-left: 1rem;">Editar Paquete</a>
+                    {% endif %}
                 </div>
             </div>
 
@@ -92,50 +95,65 @@
                             </div>
                             <div class="detail-item">
                                 <h3>👥 Grupo Mínimo</h3>
-                                <p>4 personas</p>
+                                <p>{{ viaje.grupo_minimo or "4 personas" }}</p>
                             </div>
                             <div class="detail-item">
                                 <h3>🏨 Alojamiento</h3>
-                                <p>Hoteles seleccionados</p>
+                                <p>{{ viaje.alojamiento or "Hoteles seleccionados" }}</p>
                             </div>
                             <div class="detail-item">
                                 <h3>🍽️ Alimentación</h3>
-                                <p>Desayunos incluidos</p>
+                                <p>{{ viaje.alimentacion or "Desayunos incluidos" }}</p>
                             </div>
                             <div class="detail-item">
                                 <h3>🚗 Transporte</h3>
-                                <p>Traslados terrestres</p>
+                                <p>{{ viaje.transporte or "Traslados terrestres" }}</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="itinerary">
                         <h2>Itinerario Sugerido</h2>
-                        <div class="itinerary-item">
-                            <h3>Día 1: Llegada y Bienvenida</h3>
-                            <p>Recepción en el aeropuerto y traslado al hotel. Cena de bienvenida con el grupo.</p>
-                        </div>
-                        <div class="itinerary-item">
-                            <h3>Día 2-3: Actividades Principales</h3>
-                            <p>Exploración de los principales atractivos turísticos según el destino seleccionado.</p>
-                        </div>
-                        <div class="itinerary-item">
-                            <h3>Día 4: Tiempo Libre</h3>
-                            <p>Jornada libre para actividades personales o compras en el destino.</p>
-                        </div>
-                        <div class="itinerary-item">
-                            <h3>Día 5: Regreso</h3>
-                            <p>Traslado al aeropuerto y vuelo de regreso. Fin del viaje.</p>
-                        </div>
+                        {% if viaje.itinerario %}
+                            {% for item in viaje.itinerario %}
+                                <div class="itinerary-item">
+                                    <h3>{{ item.dia }}</h3>
+                                    <p>{{ item.descripcion }}</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="itinerary-item">
+                                <h3>Día 1: Llegada y Bienvenida</h3>
+                                <p>Recepción en el aeropuerto y traslado al hotel. Cena de bienvenida con el grupo.</p>
+                            </div>
+                            <div class="itinerary-item">
+                                <h3>Día 2-3: Actividades Principales</h3>
+                                <p>Exploración de los principales atractivos turísticos según el destino seleccionado.</p>
+                            </div>
+                            <div class="itinerary-item">
+                                <h3>Día 4: Tiempo Libre</h3>
+                                <p>Jornada libre para actividades personales o compras en el destino.</p>
+                            </div>
+                            <div class="itinerary-item">
+                                <h3>Día 5: Regreso</h3>
+                                <p>Traslado al aeropuerto y vuelo de regreso. Fin del viaje.</p>
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="gallery">
                         <h2>Galería de Fotos</h2>
                         <div class="gallery-grid">
-                            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Vista panorámica">
-                            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Naturaleza">
-                            <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Aventura">
-                            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cultura">
+                            {% if viaje.galeria %}
+                                {% for foto in viaje.galeria %}
+                                    <img src="{{ foto.url }}" alt="{{ foto.alt }}">
+                                {% endfor %}
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Vista panorámica">
+                                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Naturaleza">
+                                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Aventura">
+                                <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cultura">
+                            {% endif %}
                         </div>
                     </div>
 

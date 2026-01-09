@@ -633,3 +633,352 @@ nav ul li:hover .dropdown {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
 }
+
+/* Package Detail Styles */
+.package-detail {
+    background-color: white;
+    margin: 2rem 0;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.package-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.package-header h1 {
+    margin: 0;
+    color: #333;
+    font-size: 2.5rem;
+}
+
+.price-tag {
+    text-align: right;
+}
+
+.price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #f5576c;
+}
+
+.per-person {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.package-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.main-image {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.package-main-img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.package-info h2 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.description p {
+    line-height: 1.6;
+    color: #555;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.detail-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #f5576c;
+}
+
+.detail-item h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1rem;
+}
+
+.detail-item p {
+    margin: 0;
+    color: #666;
+}
+
+.itinerary-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #4facfe;
+}
+
+.itinerary-item h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.itinerary-item p {
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.gallery-grid img:hover {
+    transform: scale(1.05);
+}
+
+.services-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.services-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+    color: #555;
+}
+
+.services-list li:last-child {
+    border-bottom: none;
+}
+
+.additional-options {
+    margin-bottom: 1rem;
+}
+
+.additional-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.additional-checkbox {
+    margin-right: 0.5rem;
+}
+
+.service-name {
+    flex: 1;
+    color: #555;
+}
+
+.service-price {
+    color: #f5576c;
+    font-weight: bold;
+}
+
+.additional-total {
+    text-align: right;
+    font-weight: bold;
+    color: #333;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #f093fb, #f5576c);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    border: 2px solid #f5576c;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-secondary:hover {
+    background: #f5576c;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Media queries for package detail */
+@media (max-width: 768px) {
+    .package-content {
+        grid-template-columns: 1fr;
+    }
+
+    .package-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .package-header h1 {
+        font-size: 2rem;
+    }
+
+    .price-tag {
+        text-align: center;
+    }
+
+    .action-buttons {
+        justify-content: center;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+
+/* Admin Panel Styles */
+.admin-section {
+    background-color: white;
+    margin: 2rem 0;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.admin-section h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #f5576c;
+    padding-bottom: 0.5rem;
+}
+
+.admin-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.admin-section th,
+.admin-section td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-section th {
+    background: linear-gradient(45deg, #f093fb, #f5576c);
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.admin-section tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.admin-section tr:hover {
+    background-color: #e9ecef;
+}
+
+.admin-section .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.admin-section .btn-danger {
+    background: #dc3545;
+    color: white;
+    border: none;
+}
+
+.admin-section .btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
+}
+
+.role-select {
+    padding: 0.3rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    background: white;
+}
+
+/* Media queries for admin */
+@media (max-width: 768px) {
+    .admin-section {
+        padding: 1rem;
+    }
+
+    .admin-section table {
+        font-size: 0.8rem;
+    }
+
+    .admin-section th,
+    .admin-section td {
+        padding: 0.5rem;
+    }
+}
