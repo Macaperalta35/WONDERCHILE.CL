@@ -89,7 +89,8 @@ def init_db():
         alimentacion TEXT,
         transporte TEXT,
         itinerario TEXT,
-        galeria TEXT
+        galeria TEXT,
+        tipo TEXT DEFAULT 'paquete'
     )""")
 
     db.execute("""
@@ -279,11 +280,28 @@ def admin_viajes():
     if session.get("user_role") != "admin":
         return redirect(url_for("login"))
     db = get_db()
-    viajes = db.execute("SELECT * FROM viajes").fetchall()
-    return render_template("admin_viajes.html", viajes=viajes)
+    viajes = db.execute("SELECT * FROM viajes WHERE tipo = 'paquete'").fetchall()
+    return render_template("admin_viajes.html", viajes=viajes, tipo="paquete", titulo="Paquetes Turísticos")
+
+@app.route("/admin/giras")
+def admin_giras():
+    if session.get("user_role") != "admin":
+        return redirect(url_for("login"))
+    db = get_db()
+    viajes = db.execute("SELECT * FROM viajes WHERE tipo = 'gira'").fetchall()
+    return render_template("admin_viajes.html", viajes=viajes, tipo="gira", titulo="Giras de Estudio")
+
+@app.route("/admin/mujeres")
+def admin_mujeres():
+    if session.get("user_role") != "admin":
+        return redirect(url_for("login"))
+    db = get_db()
+    viajes = db.execute("SELECT * FROM viajes WHERE tipo = 'mujeres'").fetchall()
+    return render_template("admin_viajes.html", viajes=viajes, tipo="mujeres", titulo="Viajes Solo Mujeres")
 
 @app.route("/admin/viajes/agregar", methods=["GET", "POST"])
-def agregar_viaje():
+@app.route("/admin/<tipo>/agregar", methods=["GET", "POST"])
+def agregar_viaje(tipo="paquete"):
     if session.get("user_role") != "admin":
         return redirect(url_for("login"))
 
@@ -341,17 +359,18 @@ def agregar_viaje():
 
         db = get_db()
         db.execute(
-            "INSERT INTO viajes (titulo, descripcion, precio, imagen, grupo_minimo, alojamiento, alimentacion, transporte, itinerario, galeria) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (titulo, descripcion, precio, imagen_path, grupo_minimo, alojamiento, alimentacion, transporte, itinerario, galeria_final)
+            "INSERT INTO viajes (titulo, descripcion, precio, imagen, grupo_minimo, alojamiento, alimentacion, transporte, itinerario, galeria, tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (titulo, descripcion, precio, imagen_path, grupo_minimo, alojamiento, alimentacion, transporte, itinerario, galeria_final, tipo)
         )
         db.commit()
 
-        return redirect(url_for("admin_viajes"))
+        return redirect(url_for(f"admin_{tipo}" if tipo != "paquete" else "admin_viajes"))
 
-    return render_template("agregar_viaje.html")
+    return render_template("agregar_viaje.html", tipo=tipo)
 
 @app.route("/admin/viajes/<int:viaje_id>/editar", methods=["GET", "POST"])
-def editar_viaje(viaje_id):
+@app.route("/admin/<tipo>/<int:viaje_id>/editar", methods=["GET", "POST"])
+def editar_viaje(viaje_id, tipo=None):
     if session.get("user_role") != "admin":
         return redirect(url_for("login"))
 
@@ -422,12 +441,16 @@ def editar_viaje(viaje_id):
         )
         db.commit()
 
-        return redirect(url_for("admin_viajes"))
+        if tipo:
+            return redirect(url_for(f"admin_{tipo}"))
+        else:
+            return redirect(url_for("admin_viajes"))
 
     return render_template("editar_viaje.html", viaje=viaje)
 
 @app.route("/admin/viajes/<int:viaje_id>/delete", methods=["POST"])
-def eliminar_viaje(viaje_id):
+@app.route("/admin/<tipo>/<int:viaje_id>/delete", methods=["POST"])
+def eliminar_viaje(viaje_id, tipo=None):
     if session.get("user_role") != "admin":
         return redirect(url_for("login"))
 
@@ -435,7 +458,10 @@ def eliminar_viaje(viaje_id):
     db.execute("DELETE FROM viajes WHERE id = ?", (viaje_id,))
     db.commit()
 
-    return redirect(url_for("admin_viajes"))
+    if tipo:
+        return redirect(url_for(f"admin_{tipo}"))
+    else:
+        return redirect(url_for("admin_viajes"))
 
 @app.route("/admin/promociones")
 def admin_promociones():
