@@ -50,6 +50,15 @@
                     <input type="number" id="descuento" name="descuento" step="0.01" min="0" max="100" required>
                 </div>
                 <div>
+                    <label for="tipo">Tipo de Promoción:</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="promocion">Promoción General</option>
+                        <option value="publico">Todos los Públicos</option>
+                        <option value="mujeres">Solo Mujeres</option>
+                        <option value="estudio">Gira de Estudio</option>
+                    </select>
+                </div>
+                <div>
                     <label for="imagen_opcion">Opción de Imagen:</label>
                     <select id="imagen_opcion" name="imagen_opcion" onchange="toggleImageInput()">
                         <option value="url">URL de Imagen</option>

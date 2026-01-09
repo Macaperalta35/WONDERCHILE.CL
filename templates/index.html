@@ -11,9 +11,19 @@
     <header>
         <div class="header-left">
             {% if session.user_id %}
-                <a href="/carrito" style="text-decoration: none; color: white;"><h1>WonderChile</h1></a>
+                <a href="/carrito" style="text-decoration: none; color: inherit;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="WonderChile Logo" style="height: 40px;">
+                        <h1>WonderChile</h1>
+                    </div>
+                </a>
             {% else %}
-                <a href="/login" style="text-decoration: none; color: white;"><h1>WonderChile</h1></a>
+                <a href="/login" style="text-decoration: none; color: inherit;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="WonderChile Logo" style="height: 40px;">
+                        <h1>WonderChile</h1>
+                    </div>
+                </a>
             {% endif %}
             <p>Descubre la magia de Chile y el mundo</p>
         </div>

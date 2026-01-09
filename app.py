@@ -109,7 +109,8 @@ def init_db():
         titulo TEXT,
         descripcion TEXT,
         descuento REAL,
-        imagen TEXT
+        imagen TEXT,
+        tipo TEXT DEFAULT 'promocion'
     )""")
 
     db.commit()
@@ -480,6 +481,7 @@ def agregar_promocion():
         titulo = request.form.get("titulo")
         descripcion = request.form.get("descripcion")
         descuento = request.form.get("descuento")
+        tipo = request.form.get("tipo", "promocion")
         imagen_opcion = request.form.get("imagen_opcion")
 
         if not titulo or not descripcion or not descuento:
@@ -505,8 +507,8 @@ def agregar_promocion():
 
         db = get_db()
         db.execute(
-            "INSERT INTO promociones (titulo, descripcion, descuento, imagen) VALUES (?, ?, ?, ?)",
-            (titulo, descripcion, descuento, imagen_path)
+            "INSERT INTO promociones (titulo, descripcion, descuento, imagen, tipo) VALUES (?, ?, ?, ?, ?)",
+            (titulo, descripcion, descuento, imagen_path, tipo)
         )
         db.commit()
 
@@ -529,6 +531,7 @@ def editar_promocion(promocion_id):
         titulo = request.form.get("titulo")
         descripcion = request.form.get("descripcion")
         descuento = request.form.get("descuento")
+        tipo = request.form.get("tipo", promocion["tipo"])
         imagen_opcion = request.form.get("imagen_opcion")
 
         if not titulo or not descripcion or not descuento:
@@ -555,8 +558,8 @@ def editar_promocion(promocion_id):
                 imagen_path = nueva_imagen
 
         db.execute(
-            "UPDATE promociones SET titulo = ?, descripcion = ?, descuento = ?, imagen = ? WHERE id = ?",
-            (titulo, descripcion, descuento, imagen_path, promocion_id)
+            "UPDATE promociones SET titulo = ?, descripcion = ?, descuento = ?, imagen = ?, tipo = ? WHERE id = ?",
+            (titulo, descripcion, descuento, imagen_path, tipo, promocion_id)
         )
         db.commit()
 
