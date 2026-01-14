@@ -29,6 +29,30 @@ viajes = [
 
 cursor.executemany('INSERT OR IGNORE INTO viajes (titulo, descripcion, precio, imagen) VALUES (?, ?, ?, ?)', viajes)
 
+# Insertar giras de estudio
+giras = [
+    ('Gira Educativa', 'Experiencias de aprendizaje únicas para estudiantes de todos los niveles, combinando educación con aventura.', 150000, 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'gira'),
+    ('Intercambio Cultural', 'Programas de inmersión cultural que permiten a los estudiantes vivir experiencias auténticas en diferentes países.', 200000, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'gira'),
+    ('Investigación Científica', 'Giras especializadas para estudiantes de ciencias que incluyen visitas a centros de investigación y laboratorios.', 180000, 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'gira'),
+    ('Arte y Cultura', 'Exploración de museos, galerías y manifestaciones culturales en destinos seleccionados.', 120000, 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'gira'),
+    ('Idiomas en el Extranjero', 'Programas intensivos de aprendizaje de idiomas con inmersión cultural completa.', 250000, 'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'gira'),
+    ('Deportes y Aventura', 'Actividades deportivas y de aventura combinadas con aprendizaje y trabajo en equipo.', 160000, 'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'gira')
+]
+
+cursor.executemany('INSERT OR IGNORE INTO viajes (titulo, descripcion, precio, imagen, tipo) VALUES (?, ?, ?, ?, ?)', giras)
+
+# Insertar viajes solo mujeres
+mujeres = [
+    ('Viaje Solo Mujeres Patagonia', 'Explora la Patagonia chilena en un viaje exclusivo para mujeres, con actividades de aventura y conexión con la naturaleza.', 180000, 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'mujeres'),
+    ('Retiro de Yoga en Viña del Mar', 'Un retiro espiritual y relajante en la costa chilena, diseñado exclusivamente para mujeres.', 120000, 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'mujeres'),
+    ('Tour Cultural Santiago', 'Descubre la historia y cultura de Santiago en un tour guiado solo para mujeres.', 80000, 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'mujeres'),
+    ('Aventura en Cajón del Maipo', 'Actividades de rafting y trekking en el Cajón del Maipo, en un entorno seguro y empoderador para mujeres.', 100000, 'https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'mujeres'),
+    ('Viaje de Empoderamiento Feminino', 'Un viaje transformador que combina aventura, cultura y empoderamiento personal para mujeres.', 150000, 'https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'mujeres'),
+    ('Exploración del Desierto de Atacama', 'Descubre la magia del desierto más árido del mundo en un viaje exclusivo para mujeres.', 200000, 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', 'mujeres')
+]
+
+cursor.executemany('INSERT OR IGNORE INTO viajes (titulo, descripcion, precio, imagen, tipo) VALUES (?, ?, ?, ?, ?)', mujeres)
+
 # Insertar promociones de ejemplo
 promociones = [
     ('Descuento Verano', 'Aprovecha un 20% de descuento en todos los tours de verano. ¡No te lo pierdas!', 20.0, '/static/uploads/descuento_verano.jpg'),

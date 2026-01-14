@@ -41,5 +41,5 @@
 - [x] Actualizar JavaScript para verificar aceptación de términos antes de agregar al carrito
 
 ## Pruebas
-- [ ] Probar login, registro, carrito, funciones de admin
-- [ ] Verificar que las nuevas características funcionen
+- [x] Probar login, registro, carrito, funciones de admin
+- [x] Verificar que las nuevas características funcionen

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import sqlite3
 import os
 import logging
@@ -214,17 +214,28 @@ def carrito():
 
     return render_template("carrito.html", items=items)
 
-@app.route("/agregar_carrito/<int:viaje_id>", methods=["POST"])
-def agregar_carrito(viaje_id):
+@app.route("/verificar_sesion")
+def verificar_sesion():
+    return jsonify({"logged_in": bool(session.get("user_id"))})
+
+@app.route("/agregar_carrito", methods=["POST"])
+def agregar_carrito():
     if not session.get("user_id"):
-        return redirect(url_for("login"))
+        return jsonify({"success": False, "message": "Usuario no autenticado"}), 401
+
+    data = request.get_json()
+    paquete = data.get("paquete")
+    if not paquete:
+        return jsonify({"success": False, "message": "Nombre del paquete requerido"}), 400
 
     db = get_db()
 
-    # Verificar que el viaje existe
-    viaje = db.execute("SELECT id FROM viajes WHERE id = ?", (viaje_id,)).fetchone()
+    # Buscar viaje por titulo
+    viaje = db.execute("SELECT id FROM viajes WHERE titulo = ?", (paquete,)).fetchone()
     if not viaje:
-        return "Viaje no encontrado", 404
+        return jsonify({"success": False, "message": "Paquete no encontrado"}), 404
+
+    viaje_id = viaje["id"]
 
     # Verificar que no esté ya en el carrito
     existe = db.execute(
@@ -232,14 +243,16 @@ def agregar_carrito(viaje_id):
         (session["user_id"], viaje_id)
     ).fetchone()
 
-    if not existe:
-        db.execute(
-            "INSERT INTO carrito (usuario_id, viaje_id) VALUES (?, ?)",
-            (session["user_id"], viaje_id)
-        )
-        db.commit()
+    if existe:
+        return jsonify({"success": False, "message": "El paquete ya está en el carrito"}), 400
 
-    return redirect(url_for("carrito"))
+    db.execute(
+        "INSERT INTO carrito (usuario_id, viaje_id) VALUES (?, ?)",
+        (session["user_id"], viaje_id)
+    )
+    db.commit()
+
+    return jsonify({"success": True, "message": "Paquete agregado al carrito"})
 
 @app.route("/eliminar_carrito/<int:item_id>", methods=["POST"])
 def eliminar_carrito(item_id):
